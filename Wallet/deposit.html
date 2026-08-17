@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <title>Wallet - Depositar</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <style>
+            body
+            {
+                padding: 20px;
+            }
+
+            .container
+            {
+                max-width: 400px;
+                margin: 0 auto;
+                background-color:rgb(248, 243, 233);
+                opacity: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <!--Pantalla deposito-->
+        <div class="container border">
+            <h2 class="text-center bg-primary">Depositar</h2>
+            
+            <!--Visualizacion dinero-->
+            <div class="form-group alert-info">
+                <label for="balance">Dinero en cuenta:</label>
+                <h3>$<span id="deposito" ></span></h3>
+            </div>
+            
+            <!--Ingreso del deposito a cuenta-->
+            <form id="form_deposit" action="menu.html" method="post">
+                <div class="form-group">
+                    <label for="depositAmount">Monto a depositar:</label>
+                    <input type="number" min="1" step="1" class="form-control" id="depositAmount" placeholder="Ingrese monto">
+                </div>
+                <div class="text-center mb-2">
+                    <button type="submit" class="btn btn-primary">Realizar depósito</button>
+                    <button type="button" class="btn btn-primary" id="btn_cancelar_deposito">Cancelar</button>
+                </div>
+            </form>
+
+            <!--Alerta-->
+            <div id="estado">
+            </div>
+            
+        </div>
+        <script>
+
+            $(document).ready(function()
+            {
+                $(".container").animate({ opacity: 1 }, 800);
+                //Actualiza el saldo de la cuenta al ingresar a la pagina
+                let total_deposito = localStorage.getItem("total_deposito") || 0;
+                $("#deposito").text(total_deposito);
+
+                //Manejo formulario del deposito
+                $("#form_deposit").submit(function(event)
+                {
+                    event.preventDefault();
+
+                    //Validacion exitosa
+                    if($("#depositAmount").val() > 0)
+                    {
+                        $("#estado").attr("class", "alert alert-success");
+                        $("#estado").text(`Se depositó a la cuenta $${$("#depositAmount").val()}. Volviendo a menú..."`);
+                        setTimeout(
+                        function()
+                        {
+                            //Guarda el total nuevo en localstorage para actualizarlo en la redireccion al menu
+                            localStorage.setItem("total_deposito", Number(total_deposito) + Number($("#depositAmount").val()));
+                            window.location.replace("menu.html");
+                        },
+                        2000);
+                    }
+                    //Alerta datos invalidos.
+                    else
+                    {
+                        $("#estado").attr("class", "alert alert-danger");
+                        $("#estado").text("Debe ingresar un monto válido.");
+                    }
+                }
+                );
+
+                //Retorna al menu
+                $("#btn_cancelar_deposito").click(function()
+                {
+                    window.location.replace("menu.html");
+                });
+
+            });
+
+        </script>
+    </body>
+</html>

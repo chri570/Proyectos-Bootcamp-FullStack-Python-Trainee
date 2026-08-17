@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <title>Wallet - Menú Principal</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <style>
+            body
+            {
+                padding: 20px;
+            }
+
+            .container
+            {
+                max-width: 500px;
+                margin: 0 auto;
+                background-color:rgb(248, 243, 233);
+                opacity: 0;
+            }
+
+            .d-flex
+            {
+                margin-left: 30px;
+                margin-right: 30px;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <!--Pantalla menu-->
+        <div class="container border">
+            <h2 class="text-center bg-primary">Menú Principal</h2>
+            
+            <!--Volver a login-->
+            <div class="d-flex flex-row justify-content-end">
+                <button id="cerrar_sesion" class="btn btn-primary mb-2">Cerrar Sesión</button>
+            </div>
+            
+            <!--Visualizacion dinero-->
+            <div class="form-group">
+                <label for="balance">Dinero en cuenta:</label>
+                <h3>$<span id="deposito" ></span></h3>
+            </div>
+
+            <!--Opciones-->
+            <div class="d-flex flex-column">
+                <a href="deposit.html" class="btn btn-primary mb-2">Depositar</a>
+                <a href="sendmoney.html" class="btn btn-primary mb-2">Enviar Dinero</a>
+                <a href="transactions.html" class="btn btn-primary mb-2">Últimos Movimientos</a>
+
+            <!--Alerta-->
+            <div id="estado">
+            </div>      
+        </div>
+        
+        <script>
+
+            $(document).ready(function()
+            {
+                $(".container").animate({ opacity: 1 }, 800);
+
+                //Actualiza el saldo de la cuenta al ingresar a la pagina
+                let deposito_total = localStorage.getItem("total_deposito") || 0;
+                $("#deposito").text(deposito_total);
+
+                //Manejo cierre de cuenta usuario
+                $("#cerrar_sesion").click(function()
+                {
+                    window.location.replace("login.html");
+                });
+
+                //Maneja botones de opciones que pertencen a la misma clase
+                $(".btn.btn-primary.mb-2").click(function(event)
+                {
+                    event.preventDefault();
+
+                    let nombre_pagina = "";
+                    let url = "";
+
+                    switch($(this).text())/*<-Obtiene el texto dentro de <a>*/
+                    {
+                        case "Depositar":
+                            nombre_pagina = "Depositar";
+                            url = "deposit";
+                            break;
+                        case "Enviar Dinero":
+                            nombre_pagina = "Enviar Dinero";
+                            url = "sendmoney";
+                            break;
+                        case "Últimos Movimientos":
+                            nombre_pagina = "Últimos Movimientos";
+                            url = "transactions";
+                            break;
+                    }
+
+                    //Alerta de redireccion a pagina dependiendo del boton presinado
+                    $("#estado").attr("class", "alert alert-info");
+                    $("#estado").text(`Redirigiendo a ${nombre_pagina}...`);
+
+                    setTimeout(
+                        function()
+                        {
+                            //Se redirecciona a la pagina en funcion del valor de url
+                            window.location.href = url + ".html";
+                        },
+                        2000);
+                });
+            });
+            
+        </script>
+
+    </body>
+</html>

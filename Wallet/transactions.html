@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <title>Wallet - Últimos Movimientos</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <style>
+            body
+            {
+            padding: 20px;
+            }
+
+            .container
+            {
+                max-width: 400px;
+                margin: 0 auto;
+                background-color:rgb(248, 243, 233);
+                opacity: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <!--Pantalla principal-->
+        <div class="container">
+            <h2 class="text-center bg-primary">Últimos Movimientos</h2>
+
+            <!--Filtro por transaccion-->
+            <div class="d-flex flex-column mb-3">
+                <label for="transaccion">Transaccion:</label>
+                <select class="form-select" id="sel_transaccion">
+                    <option disabled selected>Seleccione un tipo</option>
+                    <option>Compra en línea</option>
+                    <option>Depósito</option>
+                    <option>Transferencia recibida</option>
+                </select>
+            </div>
+
+            <!--Lista de transacciones-->
+            <ul id="lista_transacciones" class="list-group mb-2">
+                <li class="list-group-item">Compra en línea : $50.00</li>
+                <li class="list-group-item">Depósito : $<span id="deposito" ></span></li>
+                <li class="list-group-item">Transferencia recibida : $75.00</li>
+            </ul>
+
+            <div class="text-center">
+                <a href="menu.html" class="btn btn-secondary mb-2">Volver al Menú Principal</a>
+            </div>
+        </div>
+
+        <script>
+            $(document).ready(function()
+            {
+                $(".container").animate({ opacity: 1 }, 800);
+
+                //Actualiza el valor del deposito en pantalla
+                let deposito_total = localStorage.getItem("total_deposito") || 0;
+                $("#deposito").text(deposito_total);
+
+                //Maneja la opcion del filtro
+                $("#sel_transaccion").on("change", function()
+                {
+                    $("#lista_transacciones li").each(function()
+                    {
+                        //Obtiene el nombre del tipo de transaccion
+                        let nombre_transaccion = $(this).text().toLowerCase();
+
+                        //Muestra la transaccion selecccionada
+                        $(this).toggle(nombre_transaccion.includes($("#sel_transaccion").val().toLowerCase()));
+                    });
+                });
+            });
+            
+        </script>
+    </body>
+</html>

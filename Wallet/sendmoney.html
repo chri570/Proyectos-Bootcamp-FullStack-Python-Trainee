@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <title>Wallet - Enviar Dinero</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <style>
+            body
+            {
+                padding: 20px;
+            }
+
+            .container
+            {
+                max-width: 400px;
+                margin: 0 auto;
+                background-color:rgb(248, 243, 233);
+                opacity: 0;
+            }
+            #display_lista_contacto
+            {
+                display: none;
+            }
+            #display_send_money
+            {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <!--Pantalla principal enviar dinero-->
+        <div class="container" id="display_principal">
+            
+            <h2 class="text-center bg-primary">Enviar Dinero</h2>
+            
+            <!--Barra busqueda contactos-->
+            <div class="form-group">
+                <label for="searchContact">Buscar en la agenda de transferencias:</label>
+                <div class="d-flex">
+                    <input type="text" class="form-control" id="searchContact" placeholder="Buscar contacto">
+                </div>
+            </div>
+
+
+            <!--Activa la pantalla para crear nuevo contacto-->
+            <div class="text-center mb-3">
+                <a href="#" class="btn btn-secondary" id="agregarContacto">Agregar nuevo contacto</a>
+            </div>
+
+            <!--Listado de contactos registrados. Inicialmente, 2-->
+            <h3 class="text-center bg-primary">Contactos</h3>
+            <ul id="contactList" class="list-group mb-3">
+                <li class="list-group-item">
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="rdcontacto" value="c1">
+                        <div class="contact-info">
+                            <span class="contact-name">John Doe</span>
+                            <span class="contact-details">CBU: 123456789, Alias: john.doe, Banco: ABC Bank</span>
+                        </div>
+                    </div>            
+                </li>
+                <li class="list-group-item">
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="rdcontacto" value="c2">
+                        <div class="contact-info">
+                            <span class="contact-name">Jane Smith</span>
+                            <span class="contact-details">CBU: 987654321, Alias: jane.smith, Banco: XYZ Bank</span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <!--Activa la pantalla para enviar dinero a un contacto-->
+            <div class="text-center">
+                <a href="#" class="btn btn-primary mb-2" id="btn_enviar_dinero">Enviar dinero</a>
+                <a href="menu.html" class="btn btn-secondary mb-2">Volver al Menú Principal</a>
+            </div>
+
+            <!--Alerta-->
+            <div id="estado_dinero" class="mt-2 mb-2">
+            </div>
+
+        </div>
+
+
+
+
+        <!--Formulario para agregar contacto. Oculto al cargar la página-->
+        <div class="container" id="display_lista_contacto">
+            <h2 class="text-center bg-primary">Nuevo contacto</h2>
+            <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <input type="text" class="form-control" id="nombre" placeholder="Ingrese nombre">
+            </div>
+            <div class="form-group">
+                <label for="apellido">Apellido:</label>
+                <input type="text" class="form-control" id="apellido" placeholder="Ingrese apellido">
+            </div>
+            <div class="form-group">
+                <label for="cbu">Número CBU:</label>
+                <input type="number" min="9" class="form-control" id="cbu" placeholder="Ingrese CBU">
+            </div>
+            <div class="form-group">
+                <label for="alias">Alias:</label>
+                <input type="text" class="form-control" id="alias" placeholder="Ingrese alias">
+            </div>
+            <div class="d-flex flex-column mb-3">
+                <label for="banco">Seleccione banco:</label>
+                <select class="form-select" id="banco">
+                    <option disabled selected>Seleccione una opción</option>
+                    <option>Banco: ABC Bank</option>
+                    <option>Banco: XYZ Bank</option>
+                    <option>Banco: DEF Bank</option>
+                    <option>Banco: UVW Bank</option>
+                </select>
+            </div>
+            <div class="text-center">
+                <button class="btn btn-primary mb-3" id="btn_validar_contacto">Agregar</button>
+                <button class="btn btn-primary mb-3" id="btn_cancelar_contacto">Cancelar</button>
+            </div>
+            <!--Alerta-->
+            <div id="estado">
+            </div>
+        </div>
+
+
+
+
+
+        <!--Formulario para enviar dinero a un contacto. Oculto al cargar pantalla principal-->
+        <div class="container" id="display_send_money">
+            <h2 class="text-center bg-primary">Monto</h2>
+            <div class="form-group">
+                <label for="dinero_send">Ingrese monto:</label>
+                <input type="number" min="1" class="form-control" id="dinero_send" placeholder="Ingrese monto a depositar">
+            </div>
+            <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" id="check_confirmacion">
+                <label class="form-check-label">Confirmo que el monto a enviar es correcto.</label>
+            </div>
+            <div class="text-center">
+                <button class="btn btn-primary" id="btn_validar_envio">Enviar</button>
+                <button type="button" class="btn btn-primary" id="btn_cancelar_envio">Cancelar</button>
+            </div>
+            <!--Alerta-->
+            <div id="estado_confirmacion">
+            </div>
+        </div>
+
+
+        <script>
+            $(document).ready(function()
+            {
+                $(".container").animate({ opacity: 1 }, 800);
+
+                /* Actualizar listado de contactos en pantalla al cargar la pagina y agregar
+                nuevo contacto*/
+                let lista_contactos = localStorage.getItem("lista_contactos") || "";
+                if (lista_contactos  !== "")
+                    $("#contactList").html(lista_contactos);
+
+
+                $("#searchContact").on("input", function()
+                {
+                    /*Itera sobre los li pertenecientes a la clase contacTList*/
+                    $("#contactList li").each(function()
+                    {
+                        /*Toma el valor que tiene la clase span dentro de li examinado y 
+                        convierte su contenido en minuscula*/
+                        let nombre = $(this).find(".contact-name").text().toLowerCase();
+                        /*Muestra u oculta registros en funcion del input de filtro*/
+                        $(this).toggle(nombre.includes($("#searchContact").val().toLowerCase()));
+                    });
+                    
+                });
+
+
+                //Habilita el formulario de nuevo contacto y oculta la pantalla principal
+                $("#agregarContacto").click(function()
+                {
+                    //$("#display_principal").css("display", "none");
+                    //$("#display_lista_contacto").css("display", "block");
+                    $("#display_principal").slideUp(600);
+                    $("#display_lista_contacto").slideDown(1000);
+
+                });
+
+
+                //Manejo formulario de nuevo contacto
+                $("#btn_validar_contacto").click(function()
+                {
+                    //Alerta de campos incompletos
+                    if($("#nombre").val() === "" || $("#apellido").val() === "" || Number($("#cbu").val()) === 0 || $("#alias").val() === "" || $("#banco").val() === null)
+                    {
+                        console.log("Entre aca");
+                        $("#estado").attr("class", "alert alert-warning");
+                        $("#estado").text("Debe completar todos los campos.");
+                    }
+                    //Añade un nuevo contacto(li) a la lista de contactos
+                    else
+                    {
+                        cont = $("#contactList li").length+1;
+                        $("#contactList").append(
+                            `<li class='list-group-item'>
+                                <div class='form-check'>
+                                    <input type='radio' class='form-check-input' name='rdcontacto' value='c`+cont+`'>
+                                    <div class='contact-info'>
+                                        <span class='contact-name'>${$("#nombre").val()} ${$("#apellido").val()}</span>
+                                        <span class='contact-details'>CBU: ${$("#cbu").val()}, Alias: ${$("#alias").val()}, Banco: ${$("#banco").val()}</span>
+                                    </div>
+                                </div>
+                            </li>`
+                        );
+
+                        //Simula base de datos para guardar el contenido actualizado.
+                        localStorage.setItem("lista_contactos", $("#contactList").html());
+
+                        $("#estado").attr("class", "alert alert-success");
+                        $("#estado").text("Contacto creado. Espere...");
+
+                        setTimeout(
+                            function()
+                            {
+                                //window.location.href = "sendmoney.html";
+                                window.location.replace("sendmoney.html");          
+                            },
+                            2000);
+                    }
+                });
+
+                
+                //Cancela el formulario de nuevo contacto y vuelve a pantalla principal
+                $("#btn_cancelar_contacto").click(function()
+                {
+                    window.location.replace("sendmoney.html");
+                });
+
+                
+                //Oculta pantalla principal y muestra el formulario para enviar dinero
+                $("#btn_enviar_dinero").click(function()
+                {
+                    //Cambia al formulario para enviar dinero, ya que fue seleccionado un contacto
+                    if ($("input[name='rdcontacto']").is(":checked"))
+                    {
+                        $("#display_principal").slideUp(600);
+                        $("#display_send_money").slideDown(1000);
+                    }
+                    
+                    //Alerta para indicar seleccion de un contacto para acceder al formulario
+                    else
+                    {
+                        $("#estado_dinero").attr("class", "alert alert-warning");
+                        $("#estado_dinero").text("No has seleccionado un contacto.");
+                    }
+
+                });
+
+
+                //Validando dinero a enviar
+                $("#btn_validar_envio").click(function()
+                {
+                    let total_deposito = Number(localStorage.getItem("total_deposito"));//Monto en cuenta
+                    let monto = Number($("#dinero_send").val());//Monto a enviar
+
+                    //Validacion exitosa
+                    if(monto > 0 && $("#check_confirmacion").is(":checked") && total_deposito >= monto)
+                    {
+                        $("#estado_confirmacion").attr("class", "alert alert-success mb-2");
+                        $("#estado_confirmacion").text("Dinero enviado con éxito. Volviendo a menú...");
+                        
+                        setTimeout(
+                        function()
+                        {
+                            //Se resta dinero de la cuenta, se guarda y se redirecciona al menu.
+                            localStorage.setItem("total_deposito", total_deposito - monto);
+                            window.location.replace("menu.html"); 
+                        },
+                        2000);
+                    }
+                    //Alerta monto no suficiente
+                    else if (total_deposito < monto)
+                    {
+                        $("#estado_confirmacion").attr("class", "alert alert-danger mb-2");
+                        $("#estado_confirmacion").text("El monto supera lo que hay en la cuenta.");
+                    }
+                    //Alerta valor invalido
+                    else if(monto <= 0)
+                    {
+                        $("#estado_confirmacion").attr("class", "alert alert-danger mb-2");
+                        $("#estado_confirmacion").text("Valor no válido.");
+                    }
+                    //Alerta check en casilla para confirmar envio.
+                    else
+                    {
+                        $("#estado_confirmacion").attr("class", "alert alert-warning mb-2");
+                        $("#estado_confirmacion").text("Debe confirmar monto.");
+                    }
+                });
+
+                //Cancela el envio de dinero y vuelve a pantalla principal de envio.
+                $("#btn_cancelar_envio").click(function()
+                {
+                    window.location.replace("sendmoney.html");
+                });
+
+            });
+        </script>
+    </body>
+</html>
