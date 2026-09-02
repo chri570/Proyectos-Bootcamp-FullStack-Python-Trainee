@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+        <title>Itinerario de buses</title>
+        <style>
+            body
+            {
+                background-color: antiquewhite;
+            }
+            .container
+            {
+                background-color: whitesmoke ;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container shadow p-4 mb-4 bg-white">
+            <h1 class="text-center">Itinerario de buses</h1>
+
+            <nav class="navbar navbar-expand-sm bg-primary navbar-dark mb-3 justify-content-end">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'crear' %}">Nueva postulación</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <table class="table">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Línea</th>
+                        <th>Origen</th>
+                        <th>Destino</th>
+                        <th>Salida</th>
+                        <th>Llegada</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for i in itinerarios %}
+                    <tr>
+                        <td>{{i.nombre_linea}}</td>
+                        <td>{{i.origen}}</td>
+                        <td>{{i.destino}}</td>
+                        <td>{{i.hora_salida}}</td>
+                        <td>{{i.hora_llegada}}</td>
+                        <td><span id= "estado{{forloop.counter}}">{{i.estado}}</span></td>
+                        <td>
+                            <a href="{% url 'detalle' i.id %}" class="btn btn-primary btn-sm">Ver</a>
+                            <a href="{% url 'eliminar' i.id %}" class="btn btn-danger btn-sm" onclick="return confirmar_eliminacion();">Eliminar</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <script>
+            function ver_estado(valor)
+            {
+                let estado = document.getElementById(valor);
+                switch (estado.textContent)
+                {
+                    case "Operativo":
+                        estado.className = "badge badge-success";
+                        break;
+                    case "Con retraso":
+                        estado.className = "badge badge-warning";
+                        break;
+                    case "Suspendido":
+                        estado.className = "badge badge-danger";
+                        break;
+                }
+            }
+            window.onload = function()
+            {
+                {% for i in itinerarios %}
+                    ver_estado("estado{{ forloop.counter }}");
+                {% endfor %}
+            }
+
+            function confirmar_eliminacion()
+            {
+                return confirm("¿Confirma eliminación de itinerario?");
+            }
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    </body>
+</html>

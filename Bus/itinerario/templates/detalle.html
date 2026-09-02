@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+        <title>Detalle recorrido</title>
+        <style>
+            body
+            {
+                background-color: antiquewhite;
+            }
+            .container
+            {
+                background-color: whitesmoke ;
+                width: 650px;
+                height: auto;
+            }
+            .titulo
+            {
+                font-size: 20px;
+                text-align: center;
+                font-weight: bold;
+                text-decoration: underline;
+            }
+            .valor
+            {
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container shadow p-4">
+            <h1 class="text-center mb-3 bg-info text-white">Detalle recorrido</h1>
+
+            <div class="row mb-3 text-white">
+                <div class="col bg-secondary mr-3 ml-3 shadow p-4 rounded">
+                    <p class="titulo">Nombre de la línea:<p>
+                    <p class="valor text-white">{{itinerario.nombre_linea}}</p>
+
+                    <p class="titulo">Origen:</p>
+                    <p class="valor text-white">{{itinerario.origen}}</p>
+
+                    <p class="titulo">Destino:</p>
+                    <p class="valor text-white">{{itinerario.destino}}</p>
+                </div>
+
+                <div class="col ml-3 mr-3">
+                    <div class="row bg-primary mt-4 mb-5 shadow rounded">
+                        <div class="col">
+                            <p class="titulo p-1">Salida:<p>
+                            <p class="valor text-white">{{itinerario.hora_salida}}</p>
+                        </div>
+                        <div class="col">
+                            <p class="titulo p-1">Llegada:<p>
+                            <p class="valor text-white">{{itinerario.hora_llegada}}</p>
+                        </div>
+                    </div>
+                    <div class="row bg-secondary shadow rounded"  id="estado-section">
+                        <div class="col">
+                            <p class="titulo p-1">Estado:<p>
+                            <p class="valor text-white">{{itinerario.estado}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="text-center">
+                <a href="{% url 'inicio' %}" class="btn btn-primary btn-sm">Volver al inicio</a>
+            </div>
+        </div>
+        <script>
+            function ver_estado(valor)
+            {
+                let estado = document.getElementById("estado-section");
+                switch (valor)
+                {
+                    case "Operativo":
+                        estado.classList.replace("bg-secondary", "bg-success");
+                        break;
+                    case "Con retraso":
+                        estado.classList.replace("bg-secondary", "bg-warning");
+                        break;
+                    case "Suspendido":
+                        estado.classList.replace("bg-secondary", "bg-danger");
+                        break;
+                }
+            }
+            window.onload = function()
+            {
+                ver_estado("{{itinerario.estado}}");
+            }
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>

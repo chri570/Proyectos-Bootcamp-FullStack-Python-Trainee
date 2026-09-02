@@ -1,0 +1,32 @@
+Ejercicio: Aplicación de itinerarios de buses
+
+Desarrolle una aplicación web utilizando Django que permita registrar y consultar los itinerarios de buses de transporte público.
+
+La información deberá almacenarse en un archivo JSON, sin utilizar una base de datos.
+
+Cada itinerario deberá contener la siguiente información:
+
+- ID
+- Número o nombre de la línea
+- Origen
+- Destino
+- Hora de salida
+- Hora de llegada
+- Frecuencia
+- Estado
+
+Los estados disponibles serán: Operativo, Con retraso y Suspendido.
+
+La aplicación deberá permitir:
+
+- Listar los itinerarios registrados en una tabla utilizando Bootstrap.
+- Registrar un nuevo itinerario mediante un formulario.
+- Ver el detalle de un itinerario seleccionado.
+- Mostrar visualmente el estado de cada recorrido mediante colores diferentes.
+- Almacenar permanentemente los registros realizados en un archivo itinerarios.json.
+
+La página principal deberá mostrar, como mínimo:
+
+Línea | Origen | Destino | Salida | Llegada | Estado | Acción
+
+Cada itinerario deberá incluir una opción Ver itinerario para acceder a una página con todos sus antecedentes.

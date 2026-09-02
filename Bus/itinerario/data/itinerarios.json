@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "nombre_linea": "Linea 8",
+        "origen": "Población Nelda Panicucci",
+        "destino": "Centro",
+        "hora_salida": "10:15",
+        "hora_llegada": "10:45",
+        "frecuencia": "Baja",
+        "estado": "Con retraso"
+    },
+    {
+        "id": 6,
+        "nombre_linea": "Linea 15",
+        "origen": "3 puentes",
+        "destino": "Terminal 12",
+        "hora_salida": "18:30",
+        "hora_llegada": "20:30",
+        "frecuencia": "15 minutos",
+        "estado": "Suspendido"
+    },
+    {
+        "id": 7,
+        "nombre_linea": "Linea 15",
+        "origen": "Av.España",
+        "destino": "Hospital clínico Magallanes",
+        "hora_salida": "14:00",
+        "hora_llegada": "14:59",
+        "frecuencia": "15 minutos",
+        "estado": "Operativo"
+    }
+]
