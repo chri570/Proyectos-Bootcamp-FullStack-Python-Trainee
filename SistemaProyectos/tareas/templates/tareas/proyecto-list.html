@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Lista proyectos{% endblock %}
+
+{% block content %}
+    <h1>Lista de proyectos</h1>
+    <a href="{% url 'proyecto_create' %}">Crear nuevo proyecto</a>
+    {% if proyectos %}
+        {% for p in proyectos %}
+            <h2>{{p.nombre}}</h2>
+            <p>{{p.descripcion}}</p>
+            <p>Total de tareas: {{p.tareas.count}}</p>
+            <a href="{% url 'proyecto_detail' p.id %}">Ver detalle proyecto</a>
+            <hr>
+        {% endfor %}
+    {% else %}
+       <p>No existen proyectos para este usuario.<p>
+    {% endif %}
+    <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">Cerrar sesión</button>
+    </form>
+{% endblock %}

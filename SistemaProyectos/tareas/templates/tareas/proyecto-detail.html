@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Detalles proyecto{% endblock %}
+
+{% block content %}
+    <h1>Detalles proyecto</h1>
+    <a href="{% url 'proyecto_update' proyecto.id %}">Editar proyecto</a>
+    <a href="{% url 'proyecto_delete' proyecto.id %}">Borrar proyecto</a>
+
+    <h2>{{proyecto.nombre}}</h2>
+    <p>Descripción: {{proyecto.descripcion}}</p>
+    <p>Fecha de creación: {proyecto.fecha_creacion}</p>
+    <h3>Tareas</h3>
+    <a href="{% url 'tarea_create' proyecto.id %}">Crear tarea</a>
+    {% if proyecto.tareas.all %}
+        <ul>
+        {% for tarea in proyecto.tareas.all %}
+            <li>
+                {# <!--get_estado_display es la forma en que se muestra un campo
+                con choices en el template al usuario--> #}
+                <strong>{{tarea.nombre}}</strong>: {{tarea.get_estado_display}}
+                <hr>
+                <a href="{% url 'tarea_update' tarea.id %}">Editar tarea</a>
+                <a href="{% url 'tarea_delete' tarea.id %}">Borrar tarea</a>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Sin tareas disponibles</p>
+    {% endif %}
+    <a href="{% url 'proyecto_list' %}">Volver</a>
+{% endblock %}
