@@ -1,0 +1,57 @@
+/*Dimensiones del container por defecto*/
+.container
+{
+    background-color: lightskyblue;
+    width: 500px;
+    height: auto;
+}
+
+/*Tamaño contenedor del registro*/
+.registro
+{
+    width: 600px;
+    height: auto;
+}
+
+/*Tamaño mínimo fuente del formulario de registro*/
+.registro form
+{
+    font-size: min(14px);
+}
+
+/* Espacio para que los controles <- -> no tapen la card */
+#carousel-proyectos .carousel-inner
+{
+    padding-left: 60px;
+    padding-right: 60px;
+    background-color: gainsboro;
+    height: auto;
+}
+
+/* Ancho de las flechas fuera de la card */
+#carousel-proyectos .carousel-control-prev,
+#carousel-proyectos .carousel-control-next {
+    width: 50px;
+}
+
+/*Posición button del carousel más abajo*/
+#carousel-proyectos .carousel-indicators
+{
+    bottom: -20px;
+}
+
+.carousel-indicators [data-bs-target] {
+    background-color: gainsboro;
+}
+
+/*Tamaño mínimo para card de listado del proyecto*/
+.list.card
+{
+    height: 400px;
+}
+
+/*Inicio sesión*/
+.container.inicio_sesion .errorlist
+{
+    display: none !important;
+}

@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}Eliminar proyecto{% endblock %}
+{% block title %}Borrar Tarea{% endblock %}
 
 {% block content %}
     <div class="container pb-2">
-        <h1 class="text-center">Eliminar proyecto</h1>
+        <h1 class="text-center">Eliminar tarea</h1>
         <form method="post">
             {% csrf_token %}
-            <p>¿Confirma que desea eliminar <strong>{{proyecto.nombre}}</strong>?<p>
+            <p>¿Confirma que desea eliminar: <strong>{{nombre_tarea}}</strong>?<p>
             <div class="d-flex justify-content-center gap-2">
                 <button type="submit" class="btn btn-danger">Eliminar</button>
-                <a href="{% url 'proyecto_detail' proyecto_id %}" class="btn btn-secondary">Cancelar</a>
+                <a href="{% url 'proyecto_detail' proyecto_id%}" class="btn btn-secondary">Cancelar</a>
             </div>
         </form>
     </div>

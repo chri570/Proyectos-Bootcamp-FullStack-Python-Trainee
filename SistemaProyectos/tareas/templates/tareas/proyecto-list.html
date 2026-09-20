@@ -3,21 +3,67 @@
 {% block title %}Lista proyectos{% endblock %}
 
 {% block content %}
-    <h1>Lista de proyectos</h1>
-    <a href="{% url 'proyecto_create' %}">Crear nuevo proyecto</a>
-    {% if proyectos %}
-        {% for p in proyectos %}
-            <h2>{{p.nombre}}</h2>
-            <p>{{p.descripcion}}</p>
-            <p>Total de tareas: {{p.tareas.count}}</p>
-            <a href="{% url 'proyecto_detail' p.id %}">Ver detalle proyecto</a>
-            <hr>
-        {% endfor %}
-    {% else %}
-       <p>No existen proyectos para este usuario.<p>
-    {% endif %}
-    <form method="post" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button type="submit">Cerrar sesión</button>
-    </form>
+    <div class="container pb-2">
+        <h1 class="text-center">Lista de proyectos</h1>
+        <nav class="navbar navbar-expand navbar-dark bg-dark">
+            <div class="container-fluid justify-content-end">
+                <ul class="navbar-nav d-flex align-items-center">
+                    <li class="nav-item">
+                        <a href="{% url 'proyecto_create' %}" class="nav-link">Nuevo proyecto</a>
+                    </li>
+                    <li class="nav-item">
+                        <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-outline-danger btn-sm">Cerrar sesión</button>
+                            </div>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <p class="h5 text-primary mt-2">Usuario: {{user.username}}</p>
+
+        {% if proyectos %}
+
+            <!-- Carousel -->
+            <div id="carousel-proyectos" class="carousel slide" data-bs-ride="carousel">
+                <!-- Son los botones que aparecen abajo del carousel y muestran contenido específico-->
+                <div class="carousel-indicators">
+                    {% for p in proyectos %}
+                        <button type="button" data-bs-target="#carousel-proyectos" data-bs-slide-to="{{forloop.counter0}}" class="{% if forloop.first %}active{% endif %}"></button>
+                    {% endfor %}
+                </div>
+
+                <!-- Contenido del carousel que va cambiando al desplazarse -->
+                <div class="carousel-inner">
+                    {% for p in proyectos %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            <div class="list card bg bg-light p-3">
+                                <div class="card-body">
+                                    <p class="card-title h4">{{p.nombre}}</p>
+                                    <strong>Descripción: </strong>
+                                    <p class="card-text">{{p.descripcion}}</p>
+                                    <p class="card-text"><strong>Total de tareas: </strong>{{p.tareas.count}}</p>
+                                    <a href="{% url 'proyecto_detail' p.id %}" class="card-link btn btn-primary">Ver detalle proyecto</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Botones izquierda y derecha para desplazarse -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel-proyectos" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel-proyectos" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+
+            </div>
+        {% else %}
+           <p>No existen proyectos para este usuario.<p>
+        {% endif %}
+
+    </div>
 {% endblock %}

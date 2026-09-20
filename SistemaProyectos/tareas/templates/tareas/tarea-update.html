@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}Actualizar/Editar proyecto{% endblock %}
+{% block title %}Actualizar Tarea{% endblock %}
 
 {% block content %}
     <div class="container pb-2">
-        <h1 class="text-center">Actualizar proyecto</h1>
-        <form method="post" class="m-3">
+        <h1 class="text-center">Actualizar tarea</h1>
+        <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
             <div class="d-flex justify-content-center gap-2">
                 <button type="submit" class="btn btn-primary">Actualizar</button>
-                <a href="{% url 'proyecto_detail' proyecto_id %}" class="btn btn-secondary">Cancelar</a>
+                <a href="{% url 'proyecto_detail' proyecto_id%}" class="btn btn-secondary">Cancelar</a>
             </div>
         </form>
     </div>

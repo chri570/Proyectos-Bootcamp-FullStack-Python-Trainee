@@ -1,14 +1,15 @@
 from django.contrib import admin
 from .models import Proyecto, Tarea
 
-# Register your models here.
+
 @admin.register(Proyecto)
 class ProyectoAdmin(admin.ModelAdmin):
     list_display = ("nombre", "usuario", "fecha_creacion")
 
-    #username es un atributo foreign key que pertenece al modelo User
-    #y para mostrar un campo específico se utiliza __ y su nombre
+    #usuario es un objeto que pertenece al modelo User y username es un atributo de ese modelo
+    #razón por la que se usa __ para acceder al valor.
     search_fields = ("nombre", "usuario__username")
+    list_filter = ("usuario__username",)
 
 @admin.register(Tarea)
 class TareaAdmin(admin.ModelAdmin):

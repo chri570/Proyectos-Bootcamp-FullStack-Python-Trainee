@@ -3,30 +3,73 @@
 {% block title %}Detalles proyecto{% endblock %}
 
 {% block content %}
-    <h1>Detalles proyecto</h1>
-    <a href="{% url 'proyecto_update' proyecto.id %}">Editar proyecto</a>
-    <a href="{% url 'proyecto_delete' proyecto.id %}">Borrar proyecto</a>
+    <div class="container pb-2">
+        <h1 class="text-center">Detalles proyecto</h1>
 
-    <h2>{{proyecto.nombre}}</h2>
-    <p>Descripción: {{proyecto.descripcion}}</p>
-    <p>Fecha de creación: {proyecto.fecha_creacion}</p>
-    <h3>Tareas</h3>
-    <a href="{% url 'tarea_create' proyecto.id %}">Crear tarea</a>
-    {% if proyecto.tareas.all %}
-        <ul>
-        {% for tarea in proyecto.tareas.all %}
-            <li>
-                {# <!--get_estado_display es la forma en que se muestra un campo
-                con choices en el template al usuario--> #}
-                <strong>{{tarea.nombre}}</strong>: {{tarea.get_estado_display}}
-                <hr>
-                <a href="{% url 'tarea_update' tarea.id %}">Editar tarea</a>
-                <a href="{% url 'tarea_delete' tarea.id %}">Borrar tarea</a>
-            </li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>Sin tareas disponibles</p>
-    {% endif %}
-    <a href="{% url 'proyecto_list' %}">Volver</a>
+        <nav class="navbar navbar-expand navbar-dark bg-dark">
+            <div class="container-fluid justify-content-end">
+                <ul class="navbar-nav d-flex align-items-center">
+                    <li class="nav-item">
+                         <a href="{% url 'tarea_create' proyecto.id %}" class="nav-link">Crear tarea</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'proyecto_update' proyecto.id %}" class="nav-link">Editar proyecto</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'proyecto_delete' proyecto.id %}" class="nav-link">Borrar proyecto</a>
+                    </li>
+                    <li class="nav-item">
+                        <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-outline-danger btn-sm">Cerrar sesión</button>
+                            </div>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="card bg bg-light p-3 mt-2">
+            <div class="card-body">
+                <p class="card-title h4">{{proyecto.nombre}}</p>
+                <strong>Fecha de creación:</strong><p class="card-text">{{proyecto.fecha_creacion}}</p>
+                <strong>Descripción: </strong><p class="card-text">{{proyecto.descripcion}}</p>
+                <strong>Listado de tareas</strong>
+                {% if proyecto.tareas.all %}
+                    <table class="table">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Estado</th>
+                                <th>Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-secondary">
+                            {% for tarea in proyecto.tareas.all %}
+                                <tr>
+                                    <td>{{tarea.nombre}}</td>
+                                    <td>
+                                        <span class="{% if tarea.estado == 'pendiente' %}badge bg-danger{% elif tarea.estado == 'en_proceso'%}badge bg-warning{% else %}badge bg-success{% endif %}">
+                                        {{tarea.get_estado_display}}</span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex justify-content-center gap-2">
+                                            <a href="{% url 'tarea_update' tarea.id %}" class="btn btn-outline-primary btn-sm">Editar</a>
+                                            <a href="{% url 'tarea_delete' tarea.id %}" class="btn btn-outline-danger btn-sm">Borrar</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>Sin tareas disponibles.</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="text-center mt-2">
+            <a href="{% url 'proyecto_list' %}" class="btn btn-secondary">Volver</a>
+        </div>
+    </div>
 {% endblock %}

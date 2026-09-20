@@ -1,18 +1,17 @@
 {% extends "base.html" %}
 
-{% block title %}Crear proyecto{% endblock %}
+{% block title %}Crear Tarea{% endblock %}
 
 {% block content %}
     <div class="container pb-2">
-        <h1 class="text-center">Crear nuevo proyecto</h1>
+        <h1 class="text-center">Crear nueva Tarea</h1>
         <form method="post" class="m-3">
             {% csrf_token %}
             {{ form.as_p }}
             <div class="d-flex justify-content-center gap-2">
                 <button type="submit" class="btn btn-primary">Crear</button>
-                <a href="{% url 'proyecto_list' %}" class="btn btn-secondary">Cancelar</a>
+                <a href="{% url 'proyecto_detail' proyecto_id%}" class="btn btn-secondary">Cancelar</a>
             </div>
         </form>
     </div>
-
 {% endblock %}
