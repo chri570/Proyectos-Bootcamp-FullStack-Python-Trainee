@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Eliminar cuenta | Alke Wallet{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-bd-8">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h1 class="h5">Eliminar cuenta </h1>
+                <p class="h4">¿Desea eliminar cuenta: <strong>{{cuenta.numero}}</strong>?</p>
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <button class="btn btn-danger">Eliminar cuenta</button>
+                    <a href="{% url 'detalle_cliente' id_cliente %}" class="btn btn-outline-secondary">Cancelar</a>
+                </form>
+
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

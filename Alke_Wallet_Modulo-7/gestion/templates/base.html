@@ -1,0 +1,60 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>{% block title %}Alke Wallet{% endblock %}</title>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <header class="bg-primary text-white py-3">
+            <div class="container">
+                <div class="d-flex flex-wrap gap-3 justify-content-between align-items-center">
+                    <a href="{% url 'lista_clientes' %}" class="h4 text-white text-decoration-none mb-0">Alke Wallet</a>
+
+                    {% if user.is_authenticated %}
+                        <div class="d-flex flex-wrap gap-2">
+                            <span>Hola, {{ user.username }}</span>
+                            {% if user.is_staff %}
+                                {# Acceso al admin de django #}
+                                <a href="{% url 'admin:index' %}" class="btn btn-outline-light btn-sm">Administración</a>
+                            {% endif %}
+
+                            <form method="post" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-light btn-sm">Logout</button>
+                            </form>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </header>
+
+        <main class="container py-4">
+            {% for message in messages %}
+                <div class="alert 
+                    {% if message.tags == 'error' %}
+                        alert-danger
+                    {% else %}
+                        alert-success
+                    {% endif %}"
+                    role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+            {% block content %}
+            {% endblock %}
+        </main>
+
+        <footer class="container boder-top py-3 text-muted">
+            Alke Wallet
+        </footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>

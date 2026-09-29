@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}{{ titulo }} | Alke Wallet{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-bd-8">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h1 class="h4">{{ cliente.nombre }}</h1>
+                <p class="text-muted">Email: {{ cliente.email }}</p>
+                <p class="text-muted">Teléfono: {{ cliente.telefono }}</p>
+                {% if cuenta %}
+                    <p class="text-muted">N°Cuenta: {{ cuenta.numero }}</p>
+                    <p class="text-muted">Fecha creación cuenta: {{cuenta.fecha_creacion}}</p>
+                <p class="{% if cuenta.saldo < 0 %}text-danger{% elif cuenta.saldo == 0%}text-info{% else %}text-success{% endif %}"><strong>Saldo: ${{cuenta.saldo|floatformat:2}}</strong></p>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>N°</th>
+                                    <th>Movimiento</th>
+                                    <th>Monto</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for m in movimientos %}
+                                    <tr>
+                                        <td>{{forloop.counter}}</td>
+                                        <td><span class="{% if m.tipo == 'ingreso' %}badge bg-success{% else %}badge bg-danger{% endif %}">{{m.get_tipo_display}}</span></td>
+                                        <td>{{m.monto}}</td>
+                                        <td>{{m.fecha}}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted">Sin transacciones.</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <a href="{% url 'actualizar_cuenta' cuenta.pk %}" class="btn btn-outline-primary m-1">Actualizar Cuenta</a>
+                    <a href="{% url 'eliminar_cuenta' cuenta.pk %}" class="btn btn-outline-danger m-1">Eliminar Cuenta</a>
+                    <a href="{% url 'crear_transaccion' cuenta.pk %}" class="btn btn-outline-success m-1">Crear transacción</a>
+                {% else %}
+                    <p class="text-danger"><strong>Sin cuenta asociada.</strong></p>
+                    <a href="{% url 'crear_cuenta' cliente.pk %}" class="btn btn-outline-primary m-1">Crear Cuenta</a>
+                {% endif %}
+                <a href="{% url 'lista_clientes' %}" class="btn btn-outline-secondary m-1">Volver</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
